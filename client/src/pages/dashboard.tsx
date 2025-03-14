@@ -3,23 +3,33 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Loader2 } from "lucide-react";
+import { Loader2, MapPin, Calendar, Users } from "lucide-react";
+import type { Opportunity, Application } from "@shared/schema";
 
 export default function Dashboard() {
   const { user, logoutMutation } = useAuth();
 
-  const { data: opportunities, isLoading: loadingOpportunities } = useQuery({
+  const { data: opportunities, isLoading: loadingOpportunities, error: opportunitiesError } = useQuery<Opportunity[]>({
     queryKey: ["/api/opportunities"],
   });
 
-  const { data: applications, isLoading: loadingApplications } = useQuery({
+  const { data: applications, isLoading: loadingApplications, error: applicationsError } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
+    enabled: user?.userType === "individual",
   });
 
   if (loadingOpportunities || loadingApplications) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin text-border" />
+      </div>
+    );
+  }
+
+  if (opportunitiesError || applicationsError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Error loading data. Please try again later.</p>
       </div>
     );
   }
@@ -67,34 +77,107 @@ export default function Dashboard() {
                       <CardTitle>{opportunity.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground">{opportunity.description}</p>
-                      <p className="mt-2">Location: {opportunity.location}</p>
-                      <p>Status: {opportunity.status}</p>
+                      <p className="text-muted-foreground mb-4">{opportunity.description}</p>
+                      <div className="grid sm:grid-cols-3 gap-4 text-sm">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <MapPin className="h-4 w-4" />
+                          <span>{opportunity.location}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Calendar className="h-4 w-4" />
+                          <span>{new Date(opportunity.startDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Users className="h-4 w-4" />
+                          <span>{opportunity.status}</span>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
+                {(!opportunities || opportunities.filter(o => o.organizationId === user.id).length === 0) && (
+                  <Card>
+                    <CardContent className="p-6 text-center text-muted-foreground">
+                      <p>You haven't posted any opportunities yet.</p>
+                      <Link href="/opportunities/new">
+                        <Button variant="link">Post your first opportunity</Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             </div>
           ) : (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold">Your Applications</h2>
-              <div className="grid gap-4">
-                {applications?.map((application) => {
-                  const opportunity = opportunities?.find(
-                    (o) => o.id === application.opportunityId
-                  );
-                  return (
-                    <Card key={application.id}>
-                      <CardHeader>
-                        <CardTitle>{opportunity?.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p>Status: {application.status}</p>
-                        <p>Applied: {new Date(application.appliedAt).toLocaleDateString()}</p>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h2 className="text-2xl font-bold mb-4">Your Applications</h2>
+                  <div className="grid gap-4">
+                    {applications?.map((application) => {
+                      const opportunity = opportunities?.find(
+                        (o) => o.id === application.opportunityId
+                      );
+                      return (
+                        <Card key={application.id}>
+                          <CardHeader>
+                            <CardTitle>{opportunity?.title || "Opportunity"}</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-2">
+                              <p>Status: <span className="font-medium">{application.status}</span></p>
+                              <p className="text-sm text-muted-foreground">
+                                Applied: {new Date(application.appliedAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                    {(!applications || applications.length === 0) && (
+                      <Card>
+                        <CardContent className="p-6 text-center text-muted-foreground">
+                          <p>You haven't applied to any opportunities yet.</p>
+                          <p className="text-sm mt-2">Browse opportunities below to get started!</p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <h2 className="text-2xl font-bold mb-4">Available Opportunities</h2>
+                  <div className="grid gap-4">
+                    {opportunities?.filter(o => o.status === "open").map((opportunity) => (
+                      <Card key={opportunity.id}>
+                        <CardHeader>
+                          <CardTitle>{opportunity.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground mb-4">{opportunity.description}</p>
+                          <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                              <MapPin className="h-4 w-4" />
+                              <span>{opportunity.location}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                              <Calendar className="h-4 w-4" />
+                              <span>{new Date(opportunity.startDate).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                          <Button className="w-full">Apply Now</Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                    {(!opportunities || opportunities.filter(o => o.status === "open").length === 0) && (
+                      <Card>
+                        <CardContent className="p-6 text-center text-muted-foreground">
+                          <p>No opportunities available at the moment.</p>
+                          <p className="text-sm mt-2">Check back soon!</p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           )}
