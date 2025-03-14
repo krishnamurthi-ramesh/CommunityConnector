@@ -1,4 +1,11 @@
-import { User, InsertUser, Opportunity, Application, Event, EventRegistration } from "@shared/schema";
+import {
+  User,
+  InsertUser,
+  Opportunity,
+  Application,
+  Event,
+  EventRegistration,
+} from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
 
@@ -12,14 +19,19 @@ export interface IStorage {
   getOpportunities(): Promise<Opportunity[]>;
   getOpportunity(id: number): Promise<Opportunity | undefined>;
   createOpportunity(opportunity: Opportunity): Promise<Opportunity>;
-  updateOpportunity(id: number, opportunity: Partial<Opportunity>): Promise<Opportunity>;
+  updateOpportunity(
+    id: number,
+    opportunity: Partial<Opportunity>,
+  ): Promise<Opportunity>;
 
   getApplications(userId: number): Promise<Application[]>;
   createApplication(application: Application): Promise<Application>;
   updateApplication(id: number, status: string): Promise<Application>;
 
   getEventRegistrations(userId: number): Promise<EventRegistration[]>;
-  createEventRegistration(registration: EventRegistration): Promise<EventRegistration>;
+  createEventRegistration(
+    registration: EventRegistration,
+  ): Promise<EventRegistration>;
 
   sessionStore: session.Store;
 }
@@ -48,12 +60,13 @@ export class MemStorage implements IStorage {
     this.events.set(1, {
       id: 1,
       title: "Community Clean-up Drive",
-      description: "Join us for a community-wide initiative to clean and beautify our local parks.",
+      description:
+        "Join us for a community-wide initiative to clean and beautify our local parks.",
       date: "March 20, 2024",
       time: "9:00 AM - 1:00 PM",
       location: "Central Park",
       attendees: 45,
-      organizerId: null
+      organizerId: null,
     });
 
     this.events.set(2, {
@@ -64,7 +77,7 @@ export class MemStorage implements IStorage {
       time: "10:00 AM - 4:00 PM",
       location: "Community Center",
       attendees: 30,
-      organizerId: null
+      organizerId: null,
     });
   }
 
@@ -100,7 +113,10 @@ export class MemStorage implements IStorage {
     return newOpportunity;
   }
 
-  async updateOpportunity(id: number, opportunity: Partial<Opportunity>): Promise<Opportunity> {
+  async updateOpportunity(
+    id: number,
+    opportunity: Partial<Opportunity>,
+  ): Promise<Opportunity> {
     const existing = this.opportunities.get(id);
     if (!existing) throw new Error("Opportunity not found");
 
@@ -131,21 +147,25 @@ export class MemStorage implements IStorage {
     return updated;
   }
 
-  async getEventRegistrations(userId: number): Promise<Array<Event & { registeredAt: Date }>> {
+  async getEventRegistrations(
+    userId: number,
+  ): Promise<Array<Event & { registeredAt: Date }>> {
     const registrations = Array.from(this.eventRegistrations.values()).filter(
-      (reg) => reg.userId === userId
+      (reg) => reg.userId === userId,
     );
 
-    return registrations.map(reg => {
+    return registrations.map((reg) => {
       const event = this.events.get(reg.eventId);
       return {
         ...event!,
-        registeredAt: reg.registeredAt
+        registeredAt: reg.registeredAt,
       };
     });
   }
 
-  async createEventRegistration(registration: EventRegistration): Promise<EventRegistration> {
+  async createEventRegistration(
+    registration: EventRegistration,
+  ): Promise<EventRegistration> {
     const id = this.currentId++;
     const newRegistration = { ...registration, id };
     this.eventRegistrations.set(id, newRegistration);
