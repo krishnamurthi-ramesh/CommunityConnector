@@ -1,13 +1,17 @@
 import { useAuth } from "@/hooks/use-auth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Loader2, MapPin, Calendar, Users } from "lucide-react";
 import type { Opportunity, Application } from "@shared/schema";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const { user, logoutMutation } = useAuth();
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
 
   const { data: opportunities, isLoading: loadingOpportunities, error: opportunitiesError } = useQuery<Opportunity[]>({
     queryKey: ["/api/opportunities"],
@@ -16,6 +20,27 @@ export default function Dashboard() {
   const { data: applications, isLoading: loadingApplications, error: applicationsError } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
     enabled: user?.userType === "individual",
+  });
+
+  const applyMutation = useMutation({
+    mutationFn: async (opportunityId: number) => {
+      const res = await apiRequest("POST", `/api/opportunities/${opportunityId}/apply`, {});
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/applications"] });
+      toast({
+        title: "Success",
+        description: "Application submitted successfully",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   if (loadingOpportunities || loadingApplications) {
@@ -38,7 +63,20 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <div className="flex items-center space-x-6">
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <nav className="space-x-4">
+              <Link href="/" className="text-muted-foreground hover:text-foreground">
+                Home
+              </Link>
+              <Link href="/events" className="text-muted-foreground hover:text-foreground">
+                Events
+              </Link>
+              <Link href="/forum" className="text-muted-foreground hover:text-foreground">
+                Forum
+              </Link>
+            </nav>
+          </div>
           <div className="space-x-4">
             <Button variant="outline" onClick={() => logoutMutation.mutate()}>
               Logout
@@ -164,7 +202,16 @@ export default function Dashboard() {
                               <span>{new Date(opportunity.startDate).toLocaleDateString()}</span>
                             </div>
                           </div>
-                          <Button className="w-full">Apply Now</Button>
+                          <Button 
+                            className="w-full" 
+                            onClick={() => applyMutation.mutate(opportunity.id)}
+                            disabled={applyMutation.isPending}
+                          >
+                            {applyMutation.isPending ? (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : null}
+                            Apply Now
+                          </Button>
                         </CardContent>
                       </Card>
                     ))}
