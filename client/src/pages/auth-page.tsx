@@ -2,7 +2,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +10,7 @@ import { insertUserSchema } from "@shared/schema";
 import { Redirect } from "wouter";
 import { Loader2, Heart, Users, Calendar, Trophy } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Header } from "@/components/header";
 
 export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
@@ -33,6 +33,12 @@ export default function AuthPage() {
       bio: "",
       location: "",
       skills: [],
+      organizationName: "",
+      contactPhone: "",
+      address: "",
+      serviceTypes: [],
+      operatingHours: "",
+      website: "",
     },
   });
 
@@ -50,6 +56,7 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10">
+      <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
@@ -92,21 +99,6 @@ export default function AuthPage() {
                     Monitor your volunteering journey and impact
                   </p>
                 </Card>
-              </div>
-
-              <div className="bg-background rounded-lg p-6 border">
-                <h3 className="font-semibold mb-4">Success Stories</h3>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Heart className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm">"Through Volunteer Connect, we've been able to reach more communities and make a bigger impact than ever before."</p>
-                      <p className="text-sm font-medium mt-1">- Sarah, Food Bank Coordinator</p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -185,6 +177,7 @@ export default function AuthPage() {
                               </FormItem>
                             )}
                           />
+
                           <FormField
                             control={registerForm.control}
                             name="username"
@@ -198,6 +191,7 @@ export default function AuthPage() {
                               </FormItem>
                             )}
                           />
+
                           <FormField
                             control={registerForm.control}
                             name="password"
@@ -211,19 +205,7 @@ export default function AuthPage() {
                               </FormItem>
                             )}
                           />
-                          <FormField
-                            control={registerForm.control}
-                            name="name"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl>
-                                  <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+
                           <FormField
                             control={registerForm.control}
                             name="email"
@@ -237,6 +219,111 @@ export default function AuthPage() {
                               </FormItem>
                             )}
                           />
+
+                          {registerForm.watch("userType") === "ngo" ? (
+                            <>
+                              <FormField
+                                control={registerForm.control}
+                                name="organizationName"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Organization Name</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={registerForm.control}
+                                name="contactPhone"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Contact Phone</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={registerForm.control}
+                                name="address"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Address</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={registerForm.control}
+                                name="operatingHours"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Operating Hours</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} placeholder="e.g. Mon-Fri: 9AM-5PM" />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={registerForm.control}
+                                name="website"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Website</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <FormField
+                                control={registerForm.control}
+                                name="name"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Full Name</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={registerForm.control}
+                                name="location"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Location</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            </>
+                          )}
+
                           <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
                             {registerMutation.isPending ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

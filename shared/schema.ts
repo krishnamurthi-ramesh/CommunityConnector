@@ -12,6 +12,13 @@ export const users = pgTable("users", {
   bio: text("bio"),
   location: text("location"),
   skills: text("skills").array(),
+  // Additional NGO fields
+  organizationName: text("organization_name"),
+  contactPhone: text("contact_phone"),
+  address: text("address"),
+  serviceTypes: text("service_types").array(),
+  operatingHours: text("operating_hours"),
+  website: text("website"),
 });
 
 export const opportunities = pgTable("opportunities", {
@@ -61,6 +68,12 @@ export const insertUserSchema = createInsertSchema(users).pick({
   bio: true,
   location: true,
   skills: true,
+  organizationName: true,
+  contactPhone: true,
+  address: true,
+  serviceTypes: true,
+  operatingHours: true,
+  website: true,
 });
 
 export const insertOpportunitySchema = createInsertSchema(opportunities).pick({

@@ -2,38 +2,15 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Heart, Calendar, MessageSquare, ArrowRight, CheckCircle, Trophy, Clock } from "lucide-react";
+import { Users, Heart, Calendar, MessageSquare, MapPin, Droplet, Cross, Home } from "lucide-react";
+import { Header } from "@/components/header";
 
 export default function HomePage() {
   const { user } = useAuth();
 
   return (
     <div className="min-h-screen">
-      <header className="bg-background border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Volunteer Connect</h1>
-          <nav className="space-x-6">
-            <Link href="/events" className="text-muted-foreground hover:text-foreground">
-              Events
-            </Link>
-            <Link href="/donate" className="text-muted-foreground hover:text-foreground">
-              Donate
-            </Link>
-            <Link href="/forum" className="text-muted-foreground hover:text-foreground">
-              Forum
-            </Link>
-            {user ? (
-              <Link href="/dashboard">
-                <Button variant="default">Dashboard</Button>
-              </Link>
-            ) : (
-              <Link href="/auth">
-                <Button variant="default">Login / Register</Button>
-              </Link>
-            )}
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main>
         <section className="py-24 bg-gradient-to-br from-primary/5 to-primary/10">
@@ -42,14 +19,14 @@ export default function HomePage() {
               Connect with Meaningful Volunteer Opportunities
             </h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Whether you're an individual looking to make a difference or an organization seeking dedicated volunteers, we're here to help you connect and create positive change.
+              Whether you're looking to make a difference or seeking assistance, we're here to help you connect and create positive change.
             </p>
             <div className="space-x-4">
               <Link href="/auth">
                 <Button size="lg" variant="default">Get Started</Button>
               </Link>
-              <Link href="/opportunities">
-                <Button size="lg" variant="outline">Browse Opportunities</Button>
+              <Link href="/assistance-finder">
+                <Button size="lg" variant="secondary">Find Local Help</Button>
               </Link>
             </div>
           </div>
@@ -57,72 +34,91 @@ export default function HomePage() {
 
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <h3 className="text-3xl font-bold text-center mb-12">Our Features</h3>
+            <h3 className="text-3xl font-bold text-center mb-12">Quick Actions</h3>
             <div className="grid md:grid-cols-4 gap-8">
-              <Card className="text-center p-6">
-                <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h4 className="text-xl font-semibold mb-4">Volunteer Matching</h4>
-                <p className="text-muted-foreground">
-                  Find opportunities that match your skills and interests
-                </p>
-              </Card>
-              <Card className="text-center p-6">
-                <Heart className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h4 className="text-xl font-semibold mb-4">Make an Impact</h4>
-                <p className="text-muted-foreground">
-                  Contribute to causes you care about
-                </p>
-              </Card>
-              <Card className="text-center p-6">
-                <Calendar className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h4 className="text-xl font-semibold mb-4">Event Management</h4>
-                <p className="text-muted-foreground">
-                  Organize and join community events
-                </p>
-              </Card>
-              <Card className="text-center p-6">
-                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h4 className="text-xl font-semibold mb-4">Community Forum</h4>
-                <p className="text-muted-foreground">
-                  Connect with other volunteers
-                </p>
-              </Card>
+              <Link href="/opportunities">
+                <Card className="text-center p-6 hover:border-primary cursor-pointer">
+                  <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h4 className="text-xl font-semibold mb-4">Volunteer Opportunities</h4>
+                  <p className="text-muted-foreground">
+                    Find opportunities that match your skills
+                  </p>
+                </Card>
+              </Link>
+
+              <Link href="/assistance-finder">
+                <Card className="text-center p-6 hover:border-primary cursor-pointer">
+                  <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h4 className="text-xl font-semibold mb-4">Find Local Help</h4>
+                  <p className="text-muted-foreground">
+                    Locate nearby NGOs and assistance centers
+                  </p>
+                </Card>
+              </Link>
+
+              <Link href="/events">
+                <Card className="text-center p-6 hover:border-primary cursor-pointer">
+                  <Calendar className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h4 className="text-xl font-semibold mb-4">Events</h4>
+                  <p className="text-muted-foreground">
+                    Join upcoming community events
+                  </p>
+                </Card>
+              </Link>
+
+              <Link href="/forum">
+                <Card className="text-center p-6 hover:border-primary cursor-pointer">
+                  <MessageSquare className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h4 className="text-xl font-semibold mb-4">Community Forum</h4>
+                  <p className="text-muted-foreground">
+                    Connect with other volunteers
+                  </p>
+                </Card>
+              </Link>
             </div>
           </div>
         </section>
 
         <section className="py-20 bg-gradient-to-br from-primary/5 to-primary/10">
           <div className="container mx-auto px-4">
-            <h3 className="text-3xl font-bold text-center mb-12">Success Stories</h3>
+            <h3 className="text-3xl font-bold text-center mb-12">Available Services</h3>
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="p-6">
                 <CardContent className="space-y-4">
-                  <Trophy className="h-8 w-8 text-primary" />
-                  <h4 className="text-xl font-semibold">Local Food Drive</h4>
+                  <Heart className="h-8 w-8 text-primary" />
+                  <h4 className="text-xl font-semibold">Food Banks</h4>
                   <p className="text-muted-foreground">
-                    "Our team of volunteers helped distribute over 1000 meals to families in need during the holiday season."
+                    Find local food banks and meal services for those in need.
                   </p>
-                  <p className="text-sm font-medium">- Community Food Bank</p>
+                  <Link href="/assistance-finder?category=food">
+                    <Button variant="link" className="pl-0">Find Food Banks →</Button>
+                  </Link>
                 </CardContent>
               </Card>
+
               <Card className="p-6">
                 <CardContent className="space-y-4">
-                  <CheckCircle className="h-8 w-8 text-primary" />
-                  <h4 className="text-xl font-semibold">Youth Mentorship</h4>
+                  <Droplet className="h-8 w-8 text-primary" />
+                  <h4 className="text-xl font-semibold">Blood Donation</h4>
                   <p className="text-muted-foreground">
-                    "Through our mentorship program, we've helped 50 students improve their academic performance."
+                    Locate blood donation centers and upcoming blood drives.
                   </p>
-                  <p className="text-sm font-medium">- Education First NGO</p>
+                  <Link href="/assistance-finder?category=blood">
+                    <Button variant="link" className="pl-0">Find Donation Centers →</Button>
+                  </Link>
                 </CardContent>
               </Card>
+
               <Card className="p-6">
                 <CardContent className="space-y-4">
-                  <Clock className="h-8 w-8 text-primary" />
-                  <h4 className="text-xl font-semibold">Environmental Impact</h4>
+                  <Home className="h-8 w-8 text-primary" />
+                  <h4 className="text-xl font-semibold">Emergency Shelters</h4>
                   <p className="text-muted-foreground">
-                    "Our volunteers planted 500 trees and cleaned up 3 local parks in just one month."
+                    Access emergency shelter and housing assistance services.
                   </p>
-                  <p className="text-sm font-medium">- Green Earth Initiative</p>
+                  <Link href="/assistance-finder?category=shelter">
+                    <Button variant="link" className="pl-0">Find Shelters →</Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
@@ -159,7 +155,7 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold mb-4">About Us</h4>
               <p className="text-sm text-muted-foreground">
-                Volunteer Connect is a platform dedicated to connecting volunteers with meaningful opportunities to make a difference.
+                Volunteer Connect is a platform dedicated to connecting volunteers with meaningful opportunities and providing assistance to those in need.
               </p>
             </div>
             <div>
@@ -167,7 +163,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link href="/opportunities">Browse Opportunities</Link></li>
                 <li><Link href="/events">Upcoming Events</Link></li>
-                <li><Link href="/donate">Donate</Link></li>
+                <li><Link href="/assistance-finder">Find Help</Link></li>
                 <li><Link href="/forum">Community Forum</Link></li>
               </ul>
             </div>
