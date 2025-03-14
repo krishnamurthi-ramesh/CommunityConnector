@@ -2,10 +2,45 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Heart, Sparkles, Shield } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Header } from "@/components/header";
 
 export default function DonatePage() {
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState("");
+  const { toast } = useToast();
+
+  const handleDonate = () => {
+    const amount = selectedAmount || Number(customAmount);
+    if (!amount || amount <= 0) {
+      toast({
+        title: "Invalid Amount",
+        description: "Please select or enter a valid donation amount.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // In a real app, this would redirect to a payment gateway
+    toast({
+      title: "Thank you for your donation!",
+      description: `Click here to complete your $${amount} donation.`,
+      action: (
+        <Button 
+          variant="link" 
+          onClick={() => window.open('https://example.com/donate', '_blank')}
+          className="text-primary hover:text-primary/90"
+        >
+          Complete Payment
+        </Button>
+      ),
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <header className="bg-gradient-to-br from-primary/5 to-primary/10 py-12">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">Support Our Cause</h1>
@@ -20,7 +55,7 @@ export default function DonatePage() {
           <div className="space-y-8">
             <h2 className="text-2xl font-bold">Your Impact</h2>
             <div className="grid gap-6">
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Heart className="h-8 w-8 text-primary" />
@@ -33,7 +68,7 @@ export default function DonatePage() {
                   </div>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Sparkles className="h-8 w-8 text-primary" />
@@ -46,7 +81,7 @@ export default function DonatePage() {
                   </div>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Shield className="h-8 w-8 text-primary" />
@@ -63,22 +98,50 @@ export default function DonatePage() {
           </div>
 
           <div>
-            <Card>
+            <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle>Make a Donation</CardTitle>
               </CardHeader>
               <CardContent>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleDonate(); }}>
                   <div className="grid grid-cols-3 gap-4">
-                    <Button variant="outline">$10</Button>
-                    <Button variant="outline">$25</Button>
-                    <Button variant="outline">$50</Button>
+                    <Button
+                      type="button"
+                      variant={selectedAmount === 10 ? "default" : "outline"}
+                      onClick={() => { setSelectedAmount(10); setCustomAmount(""); }}
+                      className="h-16 text-lg font-semibold"
+                    >
+                      $10
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={selectedAmount === 25 ? "default" : "outline"}
+                      onClick={() => { setSelectedAmount(25); setCustomAmount(""); }}
+                      className="h-16 text-lg font-semibold"
+                    >
+                      $25
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={selectedAmount === 50 ? "default" : "outline"}
+                      onClick={() => { setSelectedAmount(50); setCustomAmount(""); }}
+                      className="h-16 text-lg font-semibold"
+                    >
+                      $50
+                    </Button>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">
                       Custom Amount
                     </label>
-                    <Input type="number" placeholder="Enter amount" min="1" />
+                    <Input
+                      type="number"
+                      placeholder="Enter amount"
+                      min="1"
+                      value={customAmount}
+                      onChange={(e) => { setCustomAmount(e.target.value); setSelectedAmount(null); }}
+                      className="text-lg"
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">
@@ -92,7 +155,9 @@ export default function DonatePage() {
                     </label>
                     <Input type="email" placeholder="Your email" />
                   </div>
-                  <Button className="w-full">Donate Now</Button>
+                  <Button type="submit" className="w-full bg-primary/90 hover:bg-primary">
+                    Donate Now
+                  </Button>
                   <p className="text-xs text-center text-muted-foreground">
                     Secure payment powered by Stripe
                   </p>

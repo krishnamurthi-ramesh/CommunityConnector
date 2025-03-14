@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
+import { Header } from "@/components/header";
 
 export default function EventsPage() {
   const { user } = useAuth();
@@ -72,6 +73,8 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
+
       <header className="bg-gradient-to-br from-primary/5 to-primary/10 py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold mb-4">Upcoming Events</h1>
@@ -84,8 +87,8 @@ export default function EventsPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <Card key={event.id}>
-              <CardHeader>
+            <Card key={event.id} className="hover:shadow-lg transition-shadow">
+              <CardHeader className="bg-primary/5">
                 <CardTitle>{event.title}</CardTitle>
               </CardHeader>
               <CardContent>
@@ -108,7 +111,7 @@ export default function EventsPage() {
                   </div>
                   <p className="text-sm text-muted-foreground">{event.description}</p>
                   <Button 
-                    className="w-full"
+                    className={`w-full ${isRegistered(event.id) ? 'bg-green-600 hover:bg-green-700' : 'bg-primary/90 hover:bg-primary'}`}
                     onClick={() => registerMutation.mutate(event.id)}
                     disabled={isRegistered(event.id) || registerMutation.isPending}
                   >
