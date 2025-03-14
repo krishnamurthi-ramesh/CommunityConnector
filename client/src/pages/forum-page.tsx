@@ -1,15 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageSquare, Users, Star, Send } from "lucide-react";
+import { MessageSquare, Users, Star, Send, X } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ForumPage() {
   const { user } = useAuth();
   const [selectedDiscussion, setSelectedDiscussion] = useState<number | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const [isCreatingDiscussion, setIsCreatingDiscussion] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<'popular' | 'recent' | 'my' | null>(null);
+  const [newDiscussion, setNewDiscussion] = useState({
+    title: "",
+    content: ""
+  });
 
   const discussions = [
     {
@@ -49,13 +56,31 @@ export default function ForumPage() {
   ];
 
   const handleSendMessage = () => {
-    if (!user) {
-      // Redirect to login if not authenticated
-      return;
-    }
+    if (!user || !newMessage.trim()) return;
     // In a real app, this would send the message to the backend
     console.log("Sending message:", newMessage);
     setNewMessage("");
+  };
+
+  const handleCreateDiscussion = () => {
+    if (!user || !newDiscussion.title.trim() || !newDiscussion.content.trim()) return;
+    // In a real app, this would create a new discussion in the backend
+    console.log("Creating discussion:", newDiscussion);
+    setNewDiscussion({ title: "", content: "" });
+    setIsCreatingDiscussion(false);
+  };
+
+  const filteredDiscussions = () => {
+    switch (activeFilter) {
+      case 'popular':
+        return [...discussions].sort((a, b) => b.views - a.views);
+      case 'recent':
+        return [...discussions].sort((a, b) => a.lastActive.localeCompare(b.lastActive));
+      case 'my':
+        return discussions.filter(d => user && d.author === user.name);
+      default:
+        return discussions;
+    }
   };
 
   const selectedThread = discussions.find(d => d.id === selectedDiscussion);
@@ -74,12 +99,27 @@ export default function ForumPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8 flex justify-between items-center">
           <div className="flex gap-4">
-            <Button variant="outline">Popular Topics</Button>
-            <Button variant="outline">Recent Activity</Button>
-            <Button variant="outline">My Discussions</Button>
+            <Button 
+              variant={activeFilter === 'popular' ? 'default' : 'outline'}
+              onClick={() => setActiveFilter('popular')}
+            >
+              Popular Topics
+            </Button>
+            <Button 
+              variant={activeFilter === 'recent' ? 'default' : 'outline'}
+              onClick={() => setActiveFilter('recent')}
+            >
+              Recent Activity
+            </Button>
+            <Button 
+              variant={activeFilter === 'my' ? 'default' : 'outline'}
+              onClick={() => setActiveFilter('my')}
+            >
+              My Discussions
+            </Button>
           </div>
           {user ? (
-            <Button>Start New Discussion</Button>
+            <Button onClick={() => setIsCreatingDiscussion(true)}>Start New Discussion</Button>
           ) : (
             <Link href="/auth">
               <Button>Login to Participate</Button>
@@ -87,9 +127,46 @@ export default function ForumPage() {
           )}
         </div>
 
+        {isCreatingDiscussion && (
+          <Card className="mb-8">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle>Create New Discussion</CardTitle>
+                <Button variant="ghost" size="icon" onClick={() => setIsCreatingDiscussion(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Title</label>
+                  <Input
+                    value={newDiscussion.title}
+                    onChange={(e) => setNewDiscussion(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="Discussion title"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Content</label>
+                  <Textarea
+                    value={newDiscussion.content}
+                    onChange={(e) => setNewDiscussion(prev => ({ ...prev, content: e.target.value }))}
+                    placeholder="What would you like to discuss?"
+                    rows={4}
+                  />
+                </div>
+                <Button className="w-full" onClick={handleCreateDiscussion}>
+                  Create Discussion
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         <div className="grid md:grid-cols-12 gap-6">
           <div className={`${selectedDiscussion ? 'md:col-span-5' : 'md:col-span-12'} grid gap-4`}>
-            {discussions.map((discussion) => (
+            {filteredDiscussions().map((discussion) => (
               <Card 
                 key={discussion.id} 
                 className={`cursor-pointer transition-colors hover:bg-accent ${selectedDiscussion === discussion.id ? 'border-primary' : ''}`}
@@ -150,6 +227,7 @@ export default function ForumPage() {
                         placeholder="Write your reply..."
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                       />
                       <Button onClick={handleSendMessage}>
                         <Send className="h-4 w-4" />
