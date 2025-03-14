@@ -11,6 +11,7 @@ import PostOpportunity from "@/pages/post-opportunity";
 import EventsPage from "@/pages/events-page";
 import DonatePage from "@/pages/donate-page";
 import ForumPage from "@/pages/forum-page";
+import OpportunitiesPage from "@/pages/opportunities-page";
 import { ProtectedRoute } from "./lib/protected-route";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/events" component={EventsPage} />
       <Route path="/donate" component={DonatePage} />
       <Route path="/forum" component={ForumPage} />
+      <Route path="/opportunities" component={OpportunitiesPage} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />
       <ProtectedRoute path="/opportunities/new" component={PostOpportunity} />
       <Route component={NotFound} />

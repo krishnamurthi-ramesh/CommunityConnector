@@ -29,6 +29,7 @@ export class MemStorage implements IStorage {
   private opportunities: Map<number, Opportunity>;
   private applications: Map<number, Application>;
   private eventRegistrations: Map<number, EventRegistration>;
+  private events: Map<number, Event>;
   private currentId: number;
   sessionStore: session.Store;
 
@@ -37,9 +38,33 @@ export class MemStorage implements IStorage {
     this.opportunities = new Map();
     this.applications = new Map();
     this.eventRegistrations = new Map();
+    this.events = new Map();
     this.currentId = 1;
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000,
+    });
+
+    // Add some sample events
+    this.events.set(1, {
+      id: 1,
+      title: "Community Clean-up Drive",
+      description: "Join us for a community-wide initiative to clean and beautify our local parks.",
+      date: "March 20, 2024",
+      time: "9:00 AM - 1:00 PM",
+      location: "Central Park",
+      attendees: 45,
+      organizerId: null
+    });
+
+    this.events.set(2, {
+      id: 2,
+      title: "Food Bank Distribution",
+      description: "Help distribute food packages to families in need.",
+      date: "March 25, 2024",
+      time: "10:00 AM - 4:00 PM",
+      location: "Community Center",
+      attendees: 30,
+      organizerId: null
     });
   }
 
@@ -106,10 +131,18 @@ export class MemStorage implements IStorage {
     return updated;
   }
 
-  async getEventRegistrations(userId: number): Promise<EventRegistration[]> {
-    return Array.from(this.eventRegistrations.values()).filter(
-      (reg) => reg.userId === userId,
+  async getEventRegistrations(userId: number): Promise<Array<Event & { registeredAt: Date }>> {
+    const registrations = Array.from(this.eventRegistrations.values()).filter(
+      (reg) => reg.userId === userId
     );
+
+    return registrations.map(reg => {
+      const event = this.events.get(reg.eventId);
+      return {
+        ...event!,
+        registeredAt: reg.registeredAt
+      };
+    });
   }
 
   async createEventRegistration(registration: EventRegistration): Promise<EventRegistration> {
