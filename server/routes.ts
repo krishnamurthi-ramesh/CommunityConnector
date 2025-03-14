@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { insertOpportunitySchema, insertApplicationSchema } from "@shared/schema";
+import { insertOpportunitySchema, insertApplicationSchema, insertEventRegistrationSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -58,6 +58,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         opportunityId: parseInt(req.params.id),
       });
       res.status(201).json(application);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json(error);
+      } else {
+        res.status(500).send("Internal server error");
+      }
+    }
+  });
+
+  // Event Registrations
+  app.get("/api/events/registrations", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Unauthorized");
+    }
+
+    const registrations = await storage.getEventRegistrations(req.user.id);
+    res.json(registrations);
+  });
+
+  app.post("/api/events/:id/register", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Unauthorized");
+    }
+
+    try {
+      const data = insertEventRegistrationSchema.parse(req.body);
+      const registration = await storage.createEventRegistration({
+        ...data,
+        userId: req.user.id,
+        eventId: parseInt(req.params.id),
+      });
+      res.status(201).json(registration);
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json(error);

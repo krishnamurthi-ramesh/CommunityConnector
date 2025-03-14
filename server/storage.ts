@@ -1,4 +1,4 @@
-import { User, InsertUser, Opportunity, InsertOpportunitySchema, Application, InsertApplicationSchema } from "@shared/schema";
+import { User, InsertUser, Opportunity, Application, Event, EventRegistration } from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
 
@@ -8,16 +8,19 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   getOpportunities(): Promise<Opportunity[]>;
   getOpportunity(id: number): Promise<Opportunity | undefined>;
   createOpportunity(opportunity: Opportunity): Promise<Opportunity>;
   updateOpportunity(id: number, opportunity: Partial<Opportunity>): Promise<Opportunity>;
-  
+
   getApplications(userId: number): Promise<Application[]>;
   createApplication(application: Application): Promise<Application>;
   updateApplication(id: number, status: string): Promise<Application>;
-  
+
+  getEventRegistrations(userId: number): Promise<EventRegistration[]>;
+  createEventRegistration(registration: EventRegistration): Promise<EventRegistration>;
+
   sessionStore: session.Store;
 }
 
@@ -25,6 +28,7 @@ export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private opportunities: Map<number, Opportunity>;
   private applications: Map<number, Application>;
+  private eventRegistrations: Map<number, EventRegistration>;
   private currentId: number;
   sessionStore: session.Store;
 
@@ -32,6 +36,7 @@ export class MemStorage implements IStorage {
     this.users = new Map();
     this.opportunities = new Map();
     this.applications = new Map();
+    this.eventRegistrations = new Map();
     this.currentId = 1;
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000,
@@ -73,7 +78,7 @@ export class MemStorage implements IStorage {
   async updateOpportunity(id: number, opportunity: Partial<Opportunity>): Promise<Opportunity> {
     const existing = this.opportunities.get(id);
     if (!existing) throw new Error("Opportunity not found");
-    
+
     const updated = { ...existing, ...opportunity };
     this.opportunities.set(id, updated);
     return updated;
@@ -95,10 +100,23 @@ export class MemStorage implements IStorage {
   async updateApplication(id: number, status: string): Promise<Application> {
     const existing = this.applications.get(id);
     if (!existing) throw new Error("Application not found");
-    
+
     const updated = { ...existing, status };
     this.applications.set(id, updated);
     return updated;
+  }
+
+  async getEventRegistrations(userId: number): Promise<EventRegistration[]> {
+    return Array.from(this.eventRegistrations.values()).filter(
+      (reg) => reg.userId === userId,
+    );
+  }
+
+  async createEventRegistration(registration: EventRegistration): Promise<EventRegistration> {
+    const id = this.currentId++;
+    const newRegistration = { ...registration, id };
+    this.eventRegistrations.set(id, newRegistration);
+    return newRegistration;
   }
 }
 

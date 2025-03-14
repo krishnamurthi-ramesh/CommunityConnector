@@ -34,6 +34,24 @@ export const applications = pgTable("applications", {
   appliedAt: timestamp("applied_at").notNull().defaultNow(),
 });
 
+export const events = pgTable("events", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  date: text("date").notNull(),
+  time: text("time").notNull(),
+  location: text("location").notNull(),
+  attendees: integer("attendees").notNull(),
+  organizerId: integer("organizer_id").references(() => users.id),
+});
+
+export const eventRegistrations = pgTable("event_registrations", {
+  id: serial("id").primaryKey(),
+  eventId: integer("event_id").references(() => events.id),
+  userId: integer("user_id").references(() => users.id),
+  registeredAt: timestamp("registered_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -58,7 +76,13 @@ export const insertApplicationSchema = createInsertSchema(applications).pick({
   opportunityId: true,
 });
 
+export const insertEventRegistrationSchema = createInsertSchema(eventRegistrations).pick({
+  eventId: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Opportunity = typeof opportunities.$inferSelect;
 export type Application = typeof applications.$inferSelect;
+export type Event = typeof events.$inferSelect;
+export type EventRegistration = typeof eventRegistrations.$inferSelect;

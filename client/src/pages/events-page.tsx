@@ -1,8 +1,41 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function EventsPage() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  const { data: registrations } = useQuery({
+    queryKey: ["/api/events/registrations"],
+    enabled: !!user,
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: async (eventId: number) => {
+      const res = await apiRequest("POST", `/api/events/${eventId}/register`, {});
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/events/registrations"] });
+      toast({
+        title: "Success",
+        description: "Successfully registered for the event",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const events = [
     {
       id: 1,
@@ -32,6 +65,10 @@ export default function EventsPage() {
       description: "Spend time with seniors through various activities and conversations.",
     },
   ];
+
+  const isRegistered = (eventId: number) => {
+    return registrations?.some((reg: any) => reg.eventId === eventId);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -70,7 +107,13 @@ export default function EventsPage() {
                     <span>{event.attendees} volunteers needed</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{event.description}</p>
-                  <Button className="w-full">Register</Button>
+                  <Button 
+                    className="w-full"
+                    onClick={() => registerMutation.mutate(event.id)}
+                    disabled={isRegistered(event.id) || registerMutation.isPending}
+                  >
+                    {isRegistered(event.id) ? "Registered" : "Register"}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
