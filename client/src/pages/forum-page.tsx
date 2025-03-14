@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
 import { Textarea } from "@/components/ui/textarea";
+import { Header } from "@/components/header";
 
 export default function ForumPage() {
   const { user } = useAuth();
@@ -18,7 +19,7 @@ export default function ForumPage() {
     content: ""
   });
 
-  const discussions = [
+  const [discussions, setDiscussions] = useState([
     {
       id: 1,
       title: "Tips for First-Time Volunteers",
@@ -53,7 +54,7 @@ export default function ForumPage() {
         { id: 1, author: "Emma L.", content: "Planning a beach cleanup next month. Any tips on organizing large groups?", time: "1 day ago" }
       ]
     },
-  ];
+  ]);
 
   const handleSendMessage = () => {
     if (!user || !newMessage.trim()) return;
@@ -64,10 +65,32 @@ export default function ForumPage() {
 
   const handleCreateDiscussion = () => {
     if (!user || !newDiscussion.title.trim() || !newDiscussion.content.trim()) return;
-    // In a real app, this would create a new discussion in the backend
-    console.log("Creating discussion:", newDiscussion);
+
+    // Create new discussion object
+    const newDiscussionObj = {
+      id: discussions.length + 1,
+      title: newDiscussion.title,
+      author: user.name,
+      replies: 0,
+      views: 0,
+      lastActive: "Just now",
+      messages: [{
+        id: 1,
+        author: user.name,
+        content: newDiscussion.content,
+        time: "Just now"
+      }]
+    };
+
+    // Add to discussions list
+    setDiscussions([newDiscussionObj, ...discussions]);
+
+    // Reset form and close modal
     setNewDiscussion({ title: "", content: "" });
     setIsCreatingDiscussion(false);
+
+    // Show the newly created discussion
+    setSelectedDiscussion(newDiscussionObj.id);
   };
 
   const filteredDiscussions = () => {
@@ -87,31 +110,23 @@ export default function ForumPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-gradient-to-br from-primary/5 to-primary/10 py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">Community Forum</h1>
-          <p className="text-lg text-muted-foreground">
-            Connect, share experiences, and learn from fellow volunteers and organizations.
-          </p>
-        </div>
-      </header>
-
+      <Header />
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8 flex justify-between items-center">
           <div className="flex gap-4">
-            <Button 
+            <Button
               variant={activeFilter === 'popular' ? 'default' : 'outline'}
               onClick={() => setActiveFilter('popular')}
             >
               Popular Topics
             </Button>
-            <Button 
+            <Button
               variant={activeFilter === 'recent' ? 'default' : 'outline'}
               onClick={() => setActiveFilter('recent')}
             >
               Recent Activity
             </Button>
-            <Button 
+            <Button
               variant={activeFilter === 'my' ? 'default' : 'outline'}
               onClick={() => setActiveFilter('my')}
             >
@@ -167,8 +182,8 @@ export default function ForumPage() {
         <div className="grid md:grid-cols-12 gap-6">
           <div className={`${selectedDiscussion ? 'md:col-span-5' : 'md:col-span-12'} grid gap-4`}>
             {filteredDiscussions().map((discussion) => (
-              <Card 
-                key={discussion.id} 
+              <Card
+                key={discussion.id}
                 className={`cursor-pointer transition-colors hover:bg-accent ${selectedDiscussion === discussion.id ? 'border-primary' : ''}`}
                 onClick={() => setSelectedDiscussion(discussion.id)}
               >
