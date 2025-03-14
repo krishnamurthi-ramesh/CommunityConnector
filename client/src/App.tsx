@@ -8,6 +8,9 @@ import AuthPage from "@/pages/auth-page";
 import HomePage from "@/pages/home-page";
 import Dashboard from "@/pages/dashboard";
 import PostOpportunity from "@/pages/post-opportunity";
+import EventsPage from "@/pages/events-page";
+import DonatePage from "@/pages/donate-page";
+import ForumPage from "@/pages/forum-page";
 import { ProtectedRoute } from "./lib/protected-route";
 
 function Router() {
@@ -15,6 +18,9 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/events" component={EventsPage} />
+      <Route path="/donate" component={DonatePage} />
+      <Route path="/forum" component={ForumPage} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />
       <ProtectedRoute path="/opportunities/new" component={PostOpportunity} />
       <Route component={NotFound} />
