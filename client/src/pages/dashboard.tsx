@@ -83,23 +83,25 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="border-b">
+      <div className="border-b bg-gradient-to-r from-background via-primary/5 to-background">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between py-6 gap-4">
             <div>
               <h1 className="text-2xl font-semibold">Dashboard</h1>
               <p className="text-muted-foreground">Welcome back, {user?.name}</p>
             </div>
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full" />
+            <div className="flex items-center gap-3">
+              <Button variant="outline" size="icon" className="relative group h-10 w-10 transition-colors hover:bg-primary/5">
+                <Bell className="h-5 w-5 transition-colors group-hover:text-primary" />
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full group-hover:animate-pulse" />
               </Button>
               {user?.userType === "ngo" && (
                 <Link href="/opportunities/new">
-                  <Button className="bg-primary hover:bg-primary/90">
-                    Post New Opportunity
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button className="bg-primary hover:bg-primary/90 transition-all duration-300 group">
+                    <span className="flex items-center gap-2">
+                      Post New Opportunity
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </Button>
                 </Link>
               )}
@@ -111,59 +113,71 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-8">
         <div className="grid gap-8">
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-none shadow-md">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Award className="h-8 w-8 text-primary" />
+            <Card className="group hover:shadow-xl transition-all duration-500 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-none">
+              <CardContent className="p-6 h-[160px] flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <div className="p-2 rounded-lg bg-primary/10 group-hover:scale-110 transition-transform duration-500">
+                    <Award className="h-6 w-6 text-primary" />
+                  </div>
                   <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-1 rounded-full">
                     This Month
                   </span>
                 </div>
-                <h3 className="font-medium text-muted-foreground">Impact Score</h3>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-3xl font-bold">85</span>
-                  <span className="text-sm text-green-500 flex items-center">
-                    <TrendingUp className="h-4 w-4 mr-1" />
-                    +12.3%
-                  </span>
+                <div>
+                  <h3 className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">Impact Score</h3>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-3xl font-bold group-hover:text-primary transition-colors">85</span>
+                    <span className="text-sm text-green-500 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      +12.3%
+                    </span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-none shadow-md">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Activity className="h-8 w-8 text-blue-500" />
+            <Card className="group hover:shadow-xl transition-all duration-500 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-none">
+              <CardContent className="p-6 h-[160px] flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <div className="p-2 rounded-lg bg-blue-500/10 group-hover:scale-110 transition-transform duration-500">
+                    <Activity className="h-6 w-6 text-blue-500" />
+                  </div>
                   <span className="text-xs font-medium bg-blue-500/10 text-blue-500 px-2 py-1 rounded-full">
                     Total
                   </span>
                 </div>
-                <h3 className="font-medium text-muted-foreground">Volunteer Hours</h3>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-3xl font-bold">24</span>
-                  <span className="text-sm text-green-500 flex items-center">
-                    <TrendingUp className="h-4 w-4 mr-1" />
-                    +8.1%
-                  </span>
+                <div>
+                  <h3 className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">Volunteer Hours</h3>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-3xl font-bold group-hover:text-blue-500 transition-colors">24</span>
+                    <span className="text-sm text-green-500 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      +8.1%
+                    </span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-transparent border-none shadow-md">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Target className="h-8 w-8 text-rose-500" />
+            <Card className="group hover:shadow-xl transition-all duration-500 bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-transparent border-none">
+              <CardContent className="p-6 h-[160px] flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <div className="p-2 rounded-lg bg-rose-500/10 group-hover:scale-110 transition-transform duration-500">
+                    <Target className="h-6 w-6 text-rose-500" />
+                  </div>
                   <span className="text-xs font-medium bg-rose-500/10 text-rose-500 px-2 py-1 rounded-full">
                     Active
                   </span>
                 </div>
-                <h3 className="font-medium text-muted-foreground">Goals Completed</h3>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-3xl font-bold">3</span>
-                  <span className="text-sm text-green-500 flex items-center">
-                    <TrendingUp className="h-4 w-4 mr-1" />
-                    +2 this month
-                  </span>
+                <div>
+                  <h3 className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">Goals Completed</h3>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-3xl font-bold group-hover:text-rose-500 transition-colors">3</span>
+                    <span className="text-sm text-green-500 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      +2 this month
+                    </span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -173,10 +187,13 @@ export default function Dashboard() {
             <div className="grid lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">Your Applications</h2>
-                  <Button variant="ghost" className="text-sm text-muted-foreground">
+                  <h2 className="text-xl font-semibold flex items-center gap-2">
+                    <Users className="h-5 w-5 text-primary" />
+                    Your Applications
+                  </h2>
+                  <Button variant="ghost" className="text-sm text-muted-foreground hover:text-primary transition-colors group">
                     View All
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </div>
                 <div className="grid gap-4">
@@ -239,11 +256,14 @@ export default function Dashboard() {
 
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">Upcoming Events</h2>
+                  <h2 className="text-xl font-semibold flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-primary" />
+                    Upcoming Events
+                  </h2>
                   <Link href="/events">
-                    <Button variant="ghost" className="text-sm text-muted-foreground">
+                    <Button variant="ghost" className="text-sm text-muted-foreground hover:text-primary transition-colors group">
                       View Calendar
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </Link>
                 </div>
@@ -302,48 +322,70 @@ export default function Dashboard() {
           {user?.userType === "ngo" && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Your Opportunities</h2>
-                <Button variant="ghost" className="text-sm text-muted-foreground">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  Your Opportunities
+                </h2>
+                <Button variant="ghost" className="text-sm text-muted-foreground hover:text-primary transition-colors group">
                   View All
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {opportunities?.filter(o => o.organizationId === user.id).map((opportunity) => (
-                  <Card key={opportunity.id} className="group hover:shadow-lg transition-all duration-300">
-                    <CardHeader className="bg-primary/5 border-b border-border/5">
-                      <div className="flex items-center justify-between mb-2">
-                        <CardTitle className="text-lg">{opportunity.title}</CardTitle>
-                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                          opportunity.status === 'open' ? 'bg-green-500/20 text-green-700' : 'bg-red-500/20 text-red-700'
-                        }`}>
-                          {opportunity.status}
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{opportunity.description}</p>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <div className="grid gap-3 text-sm">
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <MapPin className="h-4 w-4" />
-                          <span className="truncate">{opportunity.location}</span>
+              <div className="relative rounded-xl overflow-hidden">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: 'url(/auth-back.jpg)' }}
+                />
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+                <div className="relative grid md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+                  {opportunities?.filter(o => o.organizationId === user.id).map((opportunity) => (
+                    <Card 
+                      key={opportunity.id} 
+                      className="group hover:shadow-xl transition-all duration-300 bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20"
+                    >
+                      <CardHeader className="border-b border-white/10">
+                        <div className="flex items-center justify-between mb-2">
+                          <CardTitle className="text-lg text-white group-hover:text-primary transition-colors">
+                            {opportunity.title}
+                          </CardTitle>
+                          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                            opportunity.status === 'open' 
+                              ? 'bg-green-500/20 text-green-300' 
+                              : 'bg-red-500/20 text-red-300'
+                          }`}>
+                            {opportunity.status}
+                          </span>
                         </div>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Calendar className="h-4 w-4" />
-                          <span>{new Date(opportunity.startDate).toLocaleDateString()}</span>
+                        <p className="text-sm text-white/70 line-clamp-2">
+                          {opportunity.description}
+                        </p>
+                      </CardHeader>
+                      <CardContent className="pt-4">
+                        <div className="grid gap-3 text-sm">
+                          <div className="flex items-center gap-2 text-white/70">
+                            <MapPin className="h-4 w-4 text-primary" />
+                            <span className="truncate">{opportunity.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-white/70">
+                            <Calendar className="h-4 w-4 text-primary" />
+                            <span>{new Date(opportunity.startDate).toLocaleDateString()}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-white/70">
+                            <Users className="h-4 w-4 text-primary" />
+                            <span>12 applications</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Users className="h-4 w-4" />
-                          <span>12 applications</span>
-                        </div>
-                      </div>
-                      <Button variant="ghost" className="w-full mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Manage Opportunity
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <Button 
+                          variant="outline" 
+                          className="w-full mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 border-white/20 text-white hover:bg-white/20 hover:text-primary"
+                        >
+                          Manage Opportunity
+                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
             </div>
           )}

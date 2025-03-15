@@ -131,14 +131,18 @@ export default function AuthPage() {
 
             <div>
               <Card className="backdrop-blur-sm bg-white/90 shadow-xl border-primary/10">
-                <CardHeader className="space-y-1">
-                  <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent text-center">
-                    Welcome Back
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground text-center">
-                    Enter your credentials to access your account
-                  </p>
-                </CardHeader>
+              <CardHeader
+  className="space-y-1 bg-cover bg-center bg-no-repeat"
+  style={{ backgroundImage: "url('/src/components/images/auth.jpg')" }}
+>
+  <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent text-center">
+    Welcome Back
+  </CardTitle>
+  <p className="text-sm text-muted-foreground text-center">
+    Enter your credentials to access your account
+  </p>
+</CardHeader>
+
                 <CardContent>
                   <Tabs defaultValue="login" className="w-full">
                     <TabsList className="grid w-full grid-cols-2 mb-8">

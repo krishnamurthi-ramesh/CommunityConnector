@@ -86,10 +86,15 @@ export default function OpportunitiesPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <header className="bg-gradient-to-br from-primary/5 to-primary/10 py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">Volunteer Opportunities</h1>
-          <p className="text-lg text-muted-foreground">
+      <header className="relative bg-gradient-to-br from-primary/5 to-primary/10 py-12">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/src/components/images/auth.jpg)' }}
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="container mx-auto px-4 relative">
+          <h1 className="text-4xl font-bold mb-4 text-white">Volunteer Opportunities</h1>
+          <p className="text-lg text-white/80">
             Find meaningful opportunities to make a difference in your community.
           </p>
         </div>

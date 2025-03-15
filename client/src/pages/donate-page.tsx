@@ -41,10 +41,15 @@ export default function DonatePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <header className="bg-gradient-to-br from-primary/5 to-primary/10 py-12">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Support Our Cause</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+      <header className="relative bg-gradient-to-br from-primary/5 to-primary/10 py-12">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/src/components/images/hands-homepg.jpg)' }}
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="container mx-auto px-4 text-center relative">
+          <h1 className="text-4xl font-bold mb-4 text-white">Support Our Cause</h1>
+          <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Your donation helps us continue connecting volunteers with meaningful opportunities and supporting local communities.
           </p>
         </div>
@@ -55,7 +60,7 @@ export default function DonatePage() {
           <div className="space-y-8">
             <h2 className="text-2xl font-bold">Your Impact</h2>
             <div className="grid gap-6">
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white to-primary/5">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Heart className="h-8 w-8 text-primary" />
@@ -68,7 +73,7 @@ export default function DonatePage() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white to-primary/5">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Sparkles className="h-8 w-8 text-primary" />
@@ -81,7 +86,7 @@ export default function DonatePage() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white to-primary/5">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Shield className="h-8 w-8 text-primary" />
@@ -98,7 +103,7 @@ export default function DonatePage() {
           </div>
 
           <div>
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white via-white to-primary/10">
               <CardHeader>
                 <CardTitle>Make a Donation</CardTitle>
               </CardHeader>
