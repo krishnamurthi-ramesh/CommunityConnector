@@ -4,38 +4,127 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Heart, Calendar, MessageSquare, MapPin, Droplet, Cross, Home, Phone } from "lucide-react";
 import { Header } from "@/components/header";
+import { useEffect } from "react";
+import Typed from "typed.js";
+
+// Add custom animation keyframes
+const styles = `
+  @keyframes slideUpAndFade {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slideUpAndFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+`;
 
 export default function HomePage() {
   const { user } = useAuth();
+
+  useEffect(() => {
+    // Add styles to head
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
+
+    const typed = new Typed(".typed-text", {
+      strings: [
+        "Whether you're looking to make a difference^1000",
+        "seeking assistance^1000",
+        "we're here to help you connect^1000",
+        "and create positive change.^1000"
+      ],
+      typeSpeed: 50,
+      backSpeed: 30,
+      backDelay: 1000,
+      loop: true,
+      showCursor: true,
+      cursorChar: "|",
+      smartBackspace: false
+    });
+
+    return () => {
+      typed.destroy();
+      styleSheet.remove();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen">
       <Header />
 
       <main>
-        <section className="py-36 relative bg-gradient-to-br from-primary/5 to-primary/10">
+        <section className="py-48 md:py-64 relative bg-gradient-to-br from-primary/5 to-primary/10 overflow-hidden">
           <div 
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 z-0 animate-scale-in"
             style={{
               backgroundImage: 'url("/src/components/images/image.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              opacity: 0.15
+              backgroundRepeat: 'no-repeat',
+              opacity: 0.2,
+              maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)'
             }}
           />
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white z-0"
+          />
           <div className="container mx-auto px-4 text-center relative z-10">
-            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <h2 className="text-6xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent opacity-0 animate-slide-up">
               Connect with Meaningful Volunteer Opportunities
             </h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Whether you're looking to make a difference or seeking assistance, we're here to help you connect and create positive change.
+            <p className="text-3xl md:text-4xl text-muted-foreground mb-12 max-w-4xl mx-auto font-light opacity-0 animate-slide-up animation-delay-200 leading-relaxed">
+              <span className="typed-text bg-gradient-to-r from-primary/90 to-primary/70 bg-clip-text text-transparent"></span>
             </p>
-            <div className="space-x-4">
+            <div className="space-x-6 opacity-0 animate-slide-up animation-delay-300">
               <Link href="/auth">
-                <Button size="lg" variant="default">Get Started</Button>
+                <Button size="lg" className="text-lg px-8 py-6">Get Started</Button>
               </Link>
               <Link href="/assistance-finder">
-                <Button size="lg" variant="secondary">Find Local Help</Button>
+                <Button size="lg" variant="secondary" className="text-lg px-8 py-6">Find Local Help</Button>
               </Link>
             </div>
           </div>
@@ -44,19 +133,21 @@ export default function HomePage() {
         <section className="py-20 relative overflow-hidden bg-white">
           <div className="container mx-auto px-4 relative">
             <div 
-              className="absolute left-1/2 transform -translate-x-1/2 -translate-y-[40%] text-[12rem] leading-none select-none font-black tracking-widest text-center whitespace-nowrap"
+              className="absolute left-1/2 transform -translate-x-1/2 -translate-y-[20%] text-[16rem] leading-none select-none font-black tracking-[0.2em] text-center whitespace-nowrap opacity-0 animate-slide-up"
               style={{
-                color: 'rgba(244, 63, 94, 0.04)',
-                textShadow: '2px 2px 4px rgba(244, 63, 94, 0.02)'
+                background: 'linear-gradient(180deg, rgba(244, 63, 94, 0.03) 0%, rgba(244, 63, 94, 0) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: 'none'
               }}
             >
               SERVICES
             </div>
-            <h3 className="text-4xl font-bold text-center mb-16 relative z-10 bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text text-transparent">
+            <h3 className="text-4xl font-bold text-center mb-16 relative z-10 bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text text-transparent opacity-0 animate-slide-up animation-delay-100">
               Available Services
             </h3>
             <div className="grid md:grid-cols-3 gap-8 relative z-10">
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300">
+              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-200">
                 <img 
                   src="/src/components/images/food.webp" 
                   alt="Food Bank Services" 
@@ -82,7 +173,7 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300">
+              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-300">
                 <img 
                   src="/src/components/images/blood donation.webp" 
                   alt="Blood Donation Centers" 
@@ -108,7 +199,7 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300">
+              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-400">
                 <img 
                   src="/src/components/images/emergency shelters.webp" 
                   alt="Emergency Shelter Services" 
@@ -139,9 +230,9 @@ export default function HomePage() {
 
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <h3 className="text-3xl font-bold text-center mb-12">Quick Actions</h3>
+            <h3 className="text-3xl font-bold text-center mb-12 opacity-0 animate-slide-up">Quick Actions</h3>
             <div className="grid md:grid-cols-4 gap-8">
-              <Link href="/opportunities">
+              <Link href="/opportunities" className="opacity-0 animate-slide-up animation-delay-100">
                 <Card className="text-center p-6 hover:border-primary cursor-pointer">
                   <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h4 className="text-xl font-semibold mb-4">Volunteer Opportunities</h4>
@@ -151,7 +242,7 @@ export default function HomePage() {
                 </Card>
               </Link>
 
-              <Link href="/assistance-finder">
+              <Link href="/assistance-finder" className="opacity-0 animate-slide-up animation-delay-200">
                 <Card className="text-center p-6 hover:border-primary cursor-pointer">
                   <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h4 className="text-xl font-semibold mb-4">Find Local Help</h4>
@@ -161,7 +252,7 @@ export default function HomePage() {
                 </Card>
               </Link>
 
-              <Link href="/events">
+              <Link href="/events" className="opacity-0 animate-slide-up animation-delay-300">
                 <Card className="text-center p-6 hover:border-primary cursor-pointer">
                   <Calendar className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h4 className="text-xl font-semibold mb-4">Events</h4>
@@ -171,7 +262,7 @@ export default function HomePage() {
                 </Card>
               </Link>
 
-              <Link href="/forum">
+              <Link href="/forum" className="opacity-0 animate-slide-up animation-delay-400">
                 <Card className="text-center p-6 hover:border-primary cursor-pointer">
                   <MessageSquare className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h4 className="text-xl font-semibold mb-4">Community Forum</h4>
@@ -186,7 +277,7 @@ export default function HomePage() {
 
         <section className="py-20 relative">
           <div 
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 z-0 animate-scale-in"
             style={{
               backgroundImage: 'url("/src/components/images/desc.jpg")',
               backgroundSize: 'cover',
@@ -197,19 +288,19 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/60 z-0" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid md:grid-cols-4 gap-8 text-center">
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300 opacity-0 animate-slide-up animation-delay-100">
                 <p className="text-4xl font-bold text-white mb-2">1000+</p>
                 <p className="text-lg text-gray-200">Active Volunteers</p>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300 opacity-0 animate-slide-up animation-delay-200">
                 <p className="text-4xl font-bold text-white mb-2">500+</p>
                 <p className="text-lg text-gray-200">NGO Partners</p>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300 opacity-0 animate-slide-up animation-delay-300">
                 <p className="text-4xl font-bold text-white mb-2">2000+</p>
                 <p className="text-lg text-gray-200">Opportunities</p>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300 opacity-0 animate-slide-up animation-delay-400">
                 <p className="text-4xl font-bold text-white mb-2">100+</p>
                 <p className="text-lg text-gray-200">Cities Covered</p>
               </div>

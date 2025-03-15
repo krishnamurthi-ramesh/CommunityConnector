@@ -1,12 +1,32 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { MapPin, Calendar, Users, Loader2 } from "lucide-react";
+import { Globe, Send, Headphones, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Opportunity } from "@shared/schema";
 import { Header } from "@/components/header";
+
+// Helper function to get icon by opportunity type
+const getOpportunityIcon = (id: number) => {
+  const icons = {
+    1: <Globe className="h-8 w-8" />,
+    2: <Headphones className="h-8 w-8" />,
+    3: <Send className="h-8 w-8" />
+  };
+  return icons[id as keyof typeof icons] || <Globe className="h-8 w-8" />;
+};
+
+// Helper function to get button color by opportunity type
+const getButtonColor = (id: number) => {
+  const colors = {
+    1: "bg-gradient-to-r from-rose-100 to-pink-100 hover:from-rose-500 hover:to-pink-500 border-2 border-rose-500 text-rose-500 hover:text-white shadow-[0_4px_12px_rgba(251,113,133,0.2)] hover:shadow-[0_6px_20px_rgba(251,113,133,0.4)]",
+    2: "bg-gradient-to-r from-blue-100 to-cyan-100 hover:from-blue-500 hover:to-cyan-500 border-2 border-blue-500 text-blue-500 hover:text-white shadow-[0_4px_12px_rgba(59,130,246,0.2)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.4)]",
+    3: "bg-gradient-to-r from-amber-100 to-yellow-100 hover:from-amber-500 hover:to-yellow-500 border-2 border-yellow-500 text-yellow-500 hover:text-white shadow-[0_4px_12px_rgba(234,179,8,0.2)] hover:shadow-[0_6px_20px_rgba(234,179,8,0.4)]"
+  };
+  return colors[id as keyof typeof colors] || colors[1];
+};
 
 export default function OpportunitiesPage() {
   const { user } = useAuth();
@@ -83,60 +103,54 @@ export default function OpportunitiesPage() {
   const displayOpportunities = opportunities?.length ? opportunities : sampleOpportunities;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       <Header />
 
-      <header className="relative bg-gradient-to-br from-primary/5 to-primary/10 py-12">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(/src/components/images/auth.jpg)' }}
+      <div className="relative w-full">
+        <img 
+          src="/src/components/images/volunteeroportunities.jpeg"
+          alt="Volunteer Opportunities"
+          className="w-full h-auto object-contain"
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="container mx-auto px-4 relative">
-          <h1 className="text-4xl font-bold mb-4 text-white">Volunteer Opportunities</h1>
-          <p className="text-lg text-white/80">
-            Find meaningful opportunities to make a difference in your community.
-          </p>
-        </div>
-      </header>
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <main className="container mx-auto px-4 py-16 relative z-20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayOpportunities.map((opportunity) => (
-            <Card key={opportunity.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="bg-primary/5">
-                <CardTitle>{opportunity.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <p className="text-muted-foreground mb-4">{opportunity.description}</p>
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{opportunity.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{new Date(opportunity.startDate).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="h-4 w-4" />
-                    <span>Skills needed: {opportunity.requiredSkills?.join(", ")}</span>
-                  </div>
+            <Card 
+              key={opportunity.id} 
+              className="group overflow-hidden rounded-xl hover:shadow-lg transition-all duration-300 border-0 bg-white text-center p-8"
+            >
+              <CardContent className="p-0 flex flex-col items-center">
+                <div className="mb-6 text-gray-600">
+                  {getOpportunityIcon(opportunity.id)}
                 </div>
+                
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  {opportunity.title}
+                </h3>
+                
+                <p className="text-gray-500 text-sm mb-8">
+                  {opportunity.description}
+                </p>
+
                 {user?.userType === "individual" ? (
                   <Button 
-                    className="w-full bg-primary/90 hover:bg-primary" 
+                    className={`w-full ${getButtonColor(opportunity.id)} font-semibold rounded-full transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] px-8 py-2`}
                     onClick={() => applyMutation.mutate(opportunity.id)}
                     disabled={applyMutation.isPending}
                   >
                     {applyMutation.isPending ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : null}
-                    Apply Now
+                    ) : "Read More"}
                   </Button>
                 ) : (
-                  <Button className="w-full" variant="outline" disabled>
-                    Login as Individual to Apply
+                  <Button 
+                    className="w-full bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 border-2 border-gray-300 text-gray-400 font-semibold rounded-full transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.1)]"
+                    disabled
+                  >
+                    Login as Individual
                   </Button>
                 )}
               </CardContent>

@@ -92,9 +92,18 @@ export default function AuthPage() {
               <CardContent className="p-8">
                 <Tabs defaultValue="register" className="w-full">
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-semibold text-gray-900">Registration Form</h2>
-                    <p className="text-gray-500 mt-2">Create your account to get started</p>
+                    <h2 className="text-2xl font-semibold text-gray-900">Welcome Back</h2>
+                    <p className="text-gray-500 mt-2">Please sign in to your account or create a new one</p>
                   </div>
+
+                  <TabsList className="grid grid-cols-2 w-full mb-8">
+                    <TabsTrigger value="register" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">
+                      Register
+                    </TabsTrigger>
+                    <TabsTrigger value="login" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">
+                      Sign In
+                    </TabsTrigger>
+                  </TabsList>
 
                   <div className="space-y-6">
                     <TabsContent value="register">
@@ -180,17 +189,6 @@ export default function AuthPage() {
                               "Register"
                             )}
                           </Button>
-
-                          <p className="text-center text-sm text-gray-500 mt-4">
-                            Already have an account?{" "}
-                            <button
-                              type="button"
-                              className="text-purple-500 hover:text-purple-600 font-medium"
-                              onClick={() => document.querySelector('[value="login"]')?.click()}
-                            >
-                              Sign In
-                            </button>
-                          </p>
                         </form>
                       </Form>
                     </TabsContent>
@@ -249,17 +247,6 @@ export default function AuthPage() {
                               "Sign In"
                             )}
                           </Button>
-
-                          <p className="text-center text-sm text-gray-500 mt-4">
-                            Don't have an account?{" "}
-                            <button
-                              type="button"
-                              className="text-purple-500 hover:text-purple-600 font-medium"
-                              onClick={() => document.querySelector('[value="register"]')?.click()}
-                            >
-                              Register
-                            </button>
-                          </p>
                         </form>
                       </Form>
                     </TabsContent>

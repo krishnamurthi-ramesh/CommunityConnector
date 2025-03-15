@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, MapPin, Clock, Users, Tag } from "lucide-react";
+import { Calendar, MapPin, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -56,7 +56,7 @@ export default function EventsPage() {
         name: "Sarah Wilson",
         avatar: "/avatars/sarah.jpg"
       },
-      image: "/src/components/images/cleanup.jpg"
+      image: "/src/components/images/Communitycleanup.jpg"
     },
     {
       id: 2,
@@ -71,7 +71,7 @@ export default function EventsPage() {
         name: "John Doe",
         avatar: "/avatars/john.jpg"
       },
-      image: "/src/components/images/foodbank.jpg"
+      image: "/src/components/images/foodbankimage.jpg"
     },
     {
       id: 3,
@@ -130,13 +130,7 @@ export default function EventsPage() {
               key={event.id} 
               className="group overflow-hidden rounded-2xl hover:shadow-xl transition-all duration-300 border-0"
             >
-              <div className="relative h-48 overflow-hidden">
-                <div className="absolute top-4 left-4 z-20">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-purple-700 flex items-center gap-2">
-                    <Tag className="w-3 h-3" />
-                    {event.category}
-                  </span>
-                </div>
+              <div className="relative h-64 overflow-hidden">
                 <img 
                   src={event.image} 
                   alt={event.title}
