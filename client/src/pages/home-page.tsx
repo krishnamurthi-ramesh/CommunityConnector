@@ -147,94 +147,94 @@ export default function HomePage() {
               Available Services
             </h3>
             <div className="grid md:grid-cols-3 gap-8 relative z-10">
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-200">
+              <Card className="relative h-[400px] group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-200 overflow-hidden">
                 <img 
                   src="/src/components/images/food.webp" 
                   alt="Food Bank Services" 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-sm"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-                <CardContent className="relative h-full flex flex-col justify-end p-8 text-white space-y-4">
-                  <div className="absolute top-6 left-6">
-                    <Heart className="h-10 w-10 text-white drop-shadow-lg" />
-                  </div>
-                  <h4 className="text-2xl font-bold text-white drop-shadow-lg">Food Banks</h4>
-                  <p className="text-gray-200 text-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95" />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+                  <Heart className="h-6 w-6 text-rose-500" />
+                </div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end transform transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <h4 className="text-2xl font-bold mb-3 text-white drop-shadow-lg">Food Banks</h4>
+                  <p className="text-gray-200 text-lg mb-6 drop-shadow-lg">
                     Find local food banks and meal services for those in need.
                   </p>
-                  <Link href="/assistance-finder?category=food" className="mt-4 block">
+                  <Link href="/assistance-finder?category=food" className="block">
                     <Button 
                       variant="default" 
-                      className="w-full bg-white/90 hover:bg-white text-black hover:text-black/80 border-2 border-transparent hover:border-white/50 transition-all duration-300"
+                      className="w-full bg-white/90 hover:bg-rose-500 text-black hover:text-white shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Find Food Banks →
                     </Button>
                   </Link>
-                </CardContent>
+                </div>
               </Card>
 
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-300">
+              <Card className="relative h-[400px] group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-300 overflow-hidden">
                 <img 
                   src="/src/components/images/blood donation.webp" 
                   alt="Blood Donation Centers" 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-sm"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-                <CardContent className="relative h-full flex flex-col justify-end p-8 text-white space-y-4">
-                  <div className="absolute top-6 left-6">
-                    <Droplet className="h-10 w-10 text-rose-500 drop-shadow-lg" />
-                  </div>
-                  <h4 className="text-2xl font-bold text-white drop-shadow-lg">Blood Donation</h4>
-                  <p className="text-gray-200 text-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95" />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+                  <Droplet className="h-6 w-6 text-rose-500" />
+                </div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end transform transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <h4 className="text-2xl font-bold mb-3 text-white drop-shadow-lg">Blood Donation</h4>
+                  <p className="text-gray-200 text-lg mb-6 drop-shadow-lg">
                     Locate blood donation centers and upcoming blood drives.
                   </p>
-                  <Link href="/assistance-finder?category=blood" className="mt-4 block">
+                  <Link href="/assistance-finder?category=blood" className="block">
                     <Button 
                       variant="default" 
-                      className="w-full bg-white/90 hover:bg-white text-black hover:text-black/80 border-2 border-transparent hover:border-white/50 transition-all duration-300"
+                      className="w-full bg-white/90 hover:bg-rose-500 text-black hover:text-white shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Find Donation Centers →
                     </Button>
                   </Link>
-                </CardContent>
+                </div>
               </Card>
 
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-400">
+              <Card className="relative h-[400px] group hover:shadow-xl transition-all duration-300 opacity-0 animate-slide-up animation-delay-400 overflow-hidden">
                 <img 
                   src="/src/components/images/emergency shelters.webp" 
                   alt="Emergency Shelter Services" 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-sm"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-                <CardContent className="relative h-full flex flex-col justify-end p-8 text-white space-y-4">
-                  <div className="absolute top-6 left-6">
-                    <Home className="h-10 w-10 text-blue-400 drop-shadow-lg" />
-                  </div>
-                  <h4 className="text-2xl font-bold text-white drop-shadow-lg">Emergency Shelters</h4>
-                  <p className="text-gray-200 text-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95" />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+                  <Home className="h-6 w-6 text-rose-500" />
+                </div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end transform transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <h4 className="text-2xl font-bold mb-3 text-white drop-shadow-lg">Emergency Shelters</h4>
+                  <p className="text-gray-200 text-lg mb-6 drop-shadow-lg">
                     Access emergency shelter and housing assistance services.
                   </p>
-                  <Link href="/assistance-finder?category=shelter" className="mt-4 block">
+                  <Link href="/assistance-finder?category=shelter" className="block">
                     <Button 
                       variant="default" 
-                      className="w-full bg-white/90 hover:bg-white text-black hover:text-black/80 border-2 border-transparent hover:border-white/50 transition-all duration-300"
+                      className="w-full bg-white/90 hover:bg-rose-500 text-black hover:text-white shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Find Shelters →
                     </Button>
                   </Link>
-                </CardContent>
+                </div>
               </Card>
             </div>
           </div>
         </section>
 
-        <section className="py-20">
+        <section className="py-20 bg-gradient-to-br from-rose-50 to-rose-100/30">
           <div className="container mx-auto px-4">
-            <h3 className="text-3xl font-bold text-center mb-12 opacity-0 animate-slide-up">Quick Actions</h3>
+            <h3 className="text-3xl font-bold text-center mb-12 opacity-0 animate-slide-up bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text text-transparent">Quick Actions</h3>
             <div className="grid md:grid-cols-4 gap-8">
               <Link href="/opportunities" className="opacity-0 animate-slide-up animation-delay-100">
-                <Card className="text-center p-6 hover:border-primary cursor-pointer">
-                  <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <Card className="text-center p-8 hover:border-primary hover:shadow-lg cursor-pointer h-[280px] flex flex-col items-center justify-center group bg-white/80 backdrop-blur-sm">
+                  <Users className="h-12 w-12 mb-4 text-rose-500 group-hover:scale-110 transition-transform duration-300" />
                   <h4 className="text-xl font-semibold mb-4">Volunteer Opportunities</h4>
                   <p className="text-muted-foreground">
                     Find opportunities that match your skills
@@ -243,8 +243,8 @@ export default function HomePage() {
               </Link>
 
               <Link href="/assistance-finder" className="opacity-0 animate-slide-up animation-delay-200">
-                <Card className="text-center p-6 hover:border-primary cursor-pointer">
-                  <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <Card className="text-center p-8 hover:border-primary hover:shadow-lg cursor-pointer h-[280px] flex flex-col items-center justify-center group bg-white/80 backdrop-blur-sm">
+                  <MapPin className="h-12 w-12 mb-4 text-rose-500 group-hover:scale-110 transition-transform duration-300" />
                   <h4 className="text-xl font-semibold mb-4">Find Local Help</h4>
                   <p className="text-muted-foreground">
                     Locate nearby NGOs and assistance centers
@@ -253,8 +253,8 @@ export default function HomePage() {
               </Link>
 
               <Link href="/events" className="opacity-0 animate-slide-up animation-delay-300">
-                <Card className="text-center p-6 hover:border-primary cursor-pointer">
-                  <Calendar className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <Card className="text-center p-8 hover:border-primary hover:shadow-lg cursor-pointer h-[280px] flex flex-col items-center justify-center group bg-white/80 backdrop-blur-sm">
+                  <Calendar className="h-12 w-12 mb-4 text-rose-500 group-hover:scale-110 transition-transform duration-300" />
                   <h4 className="text-xl font-semibold mb-4">Events</h4>
                   <p className="text-muted-foreground">
                     Join upcoming community events
@@ -263,8 +263,8 @@ export default function HomePage() {
               </Link>
 
               <Link href="/forum" className="opacity-0 animate-slide-up animation-delay-400">
-                <Card className="text-center p-6 hover:border-primary cursor-pointer">
-                  <MessageSquare className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <Card className="text-center p-8 hover:border-primary hover:shadow-lg cursor-pointer h-[280px] flex flex-col items-center justify-center group bg-white/80 backdrop-blur-sm">
+                  <MessageSquare className="h-12 w-12 mb-4 text-rose-500 group-hover:scale-110 transition-transform duration-300" />
                   <h4 className="text-xl font-semibold mb-4">Community Forum</h4>
                   <p className="text-muted-foreground">
                     Connect with other volunteers
