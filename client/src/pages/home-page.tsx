@@ -4,32 +4,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Heart, Calendar, MessageSquare, MapPin, Droplet, Cross, Home, Phone } from "lucide-react";
 import { Header } from "@/components/header";
-import { useEffect } from 'react';
-import Typed from 'typed.js';
 
 export default function HomePage() {
   const { user } = useAuth();
-
-  useEffect(() => {
-    const typed = new Typed('.animated-text', {
-      strings: [
-        "Whether you're looking to make a difference in your community...",
-        "Whether you're seeking assistance and support...",
-        "Whether you want to create positive change...",
-        "We're here to help you connect and make an impact.",
-      ],
-      typeSpeed: 50,
-      backSpeed: 30,
-      backDelay: 1000,
-      startDelay: 500,
-      loop: true,
-      cursorChar: '|',
-    });
-
-    return () => {
-      typed.destroy();
-    };
-  }, []);
 
   return (
     <div className="min-h-screen">
@@ -50,9 +27,8 @@ export default function HomePage() {
             <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
               Connect with Meaningful Volunteer Opportunities
             </h2>
-            <br/>
-            <p className="text-2xl md:text-3xl text-muted-foreground mb-8 max-w-3xl mx-auto font-serif italic">
-              <span className="animated-text inline-block min-h-[80px]"></span>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Whether you're looking to make a difference or seeking assistance, we're here to help you connect and create positive change.
             </p>
             <div className="space-x-4">
               <Link href="/auth">
@@ -80,7 +56,7 @@ export default function HomePage() {
               Available Services
             </h3>
             <div className="grid md:grid-cols-3 gap-8 relative z-10">
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xlMicrosoft.QuickAction.MobileHotspot transition-all duration-300">
+              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300">
                 <img 
                   src="/src/components/images/food.webp" 
                   alt="Food Bank Services" 
@@ -89,9 +65,9 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
                 <CardContent className="relative h-full flex flex-col justify-end p-8 text-white space-y-4">
                   <div className="absolute top-6 left-6">
-                    <Heart className="h-10 w-10 text-primary-foreground drop-shadow-lg" />
+                    <Heart className="h-10 w-10 text-white drop-shadow-lg" />
                   </div>
-                  <h4 className="text-2xl font-bold text-primary-foreground drop-shadow-lg">Food Banks</h4>
+                  <h4 className="text-2xl font-bold text-white drop-shadow-lg">Food Banks</h4>
                   <p className="text-gray-200 text-lg">
                     Find local food banks and meal services for those in need.
                   </p>
@@ -115,9 +91,9 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
                 <CardContent className="relative h-full flex flex-col justify-end p-8 text-white space-y-4">
                   <div className="absolute top-6 left-6">
-                    <Droplet className="h-10 w-10 text-red-500 drop-shadow-lg" />
+                    <Droplet className="h-10 w-10 text-rose-500 drop-shadow-lg" />
                   </div>
-                  <h4 className="text-2xl font-bold text-primary-foreground drop-shadow-lg">Blood Donation</h4>
+                  <h4 className="text-2xl font-bold text-white drop-shadow-lg">Blood Donation</h4>
                   <p className="text-gray-200 text-lg">
                     Locate blood donation centers and upcoming blood drives.
                   </p>
@@ -143,7 +119,7 @@ export default function HomePage() {
                   <div className="absolute top-6 left-6">
                     <Home className="h-10 w-10 text-blue-400 drop-shadow-lg" />
                   </div>
-                  <h4 className="text-2xl font-bold text-primary-foreground drop-shadow-lg">Emergency Shelters</h4>
+                  <h4 className="text-2xl font-bold text-white drop-shadow-lg">Emergency Shelters</h4>
                   <p className="text-gray-200 text-lg">
                     Access emergency shelter and housing assistance services.
                   </p>
@@ -208,29 +184,33 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section 
-          className="py-20 relative bg-cover bg-center"
-          style={{
-            backgroundImage: 'url("/src/components/images/desc.jpg")'
-          }}
-        >
-          <div className="absolute inset-0 bg-black/50" />
+        <section className="py-20 relative">
+          <div 
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundImage: 'url("/src/components/images/desc.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          <div className="absolute inset-0 bg-black/60 z-0" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid md:grid-cols-4 gap-8 text-center">
-              <div>
-                <p className="text-5xl font-bold text-white mb-2">1000+</p>
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+                <p className="text-4xl font-bold text-white mb-2">1000+</p>
                 <p className="text-lg text-gray-200">Active Volunteers</p>
               </div>
-              <div>
-                <p className="text-5xl font-bold text-white mb-2">500+</p>
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+                <p className="text-4xl font-bold text-white mb-2">500+</p>
                 <p className="text-lg text-gray-200">NGO Partners</p>
               </div>
-              <div>
-                <p className="text-5xl font-bold text-white mb-2">2000+</p>
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+                <p className="text-4xl font-bold text-white mb-2">2000+</p>
                 <p className="text-lg text-gray-200">Opportunities</p>
               </div>
-              <div>
-                <p className="text-5xl font-bold text-white mb-2">100+</p>
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 transform hover:scale-105 transition-transform duration-300">
+                <p className="text-4xl font-bold text-white mb-2">100+</p>
                 <p className="text-lg text-gray-200">Cities Covered</p>
               </div>
             </div>
