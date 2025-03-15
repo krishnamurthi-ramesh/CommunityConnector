@@ -4,9 +4,32 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Heart, Calendar, MessageSquare, MapPin, Droplet, Cross, Home, Phone } from "lucide-react";
 import { Header } from "@/components/header";
+import { useEffect } from 'react';
+import Typed from 'typed.js';
 
 export default function HomePage() {
   const { user } = useAuth();
+
+  useEffect(() => {
+    const typed = new Typed('.animated-text', {
+      strings: [
+        "Whether you're looking to make a difference in your community...",
+        "Whether you're seeking assistance and support...",
+        "Whether you want to create positive change...",
+        "We're here to help you connect and make an impact.",
+      ],
+      typeSpeed: 50,
+      backSpeed: 30,
+      backDelay: 1000,
+      startDelay: 500,
+      loop: true,
+      cursorChar: '|',
+    });
+
+    return () => {
+      typed.destroy();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -28,8 +51,8 @@ export default function HomePage() {
               Connect with Meaningful Volunteer Opportunities
             </h2>
             <br/>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Whether you're looking to make a difference or seeking assistance, we're here to help you connect and create positive change.
+            <p className="text-2xl md:text-3xl text-muted-foreground mb-8 max-w-3xl mx-auto font-serif italic">
+              <span className="animated-text inline-block min-h-[80px]"></span>
             </p>
             <div className="space-x-4">
               <Link href="/auth">
@@ -42,11 +65,22 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-20 bg-gradient-to-br from-primary/5 to-primary/10">
-          <div className="container mx-auto px-4">
-            <h3 className="text-3xl font-bold text-center mb-12">Available Services</h3>
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xl transition-all duration-300">
+        <section className="py-20 relative overflow-hidden bg-white">
+          <div className="container mx-auto px-4 relative">
+            <div 
+              className="absolute left-1/2 transform -translate-x-1/2 -translate-y-[40%] text-[12rem] leading-none select-none font-black tracking-widest text-center whitespace-nowrap"
+              style={{
+                color: 'rgba(244, 63, 94, 0.04)',
+                textShadow: '2px 2px 4px rgba(244, 63, 94, 0.02)'
+              }}
+            >
+              SERVICES
+            </div>
+            <h3 className="text-4xl font-bold text-center mb-16 relative z-10 bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text text-transparent">
+              Available Services
+            </h3>
+            <div className="grid md:grid-cols-3 gap-8 relative z-10">
+              <Card className="relative h-[400px] overflow-hidden group hover:shadow-xlMicrosoft.QuickAction.MobileHotspot transition-all duration-300">
                 <img 
                   src="/src/components/images/food.webp" 
                   alt="Food Bank Services" 
