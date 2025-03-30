@@ -2,97 +2,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { Header } from "@/components/header";
+import { useEvents } from "@/hooks/use-events";
+import type { Event } from "@/services/eventService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface Registration {
-  eventId: number;
-}
 
 export default function EventsPage() {
   const { user } = useAuth();
-  const { toast } = useToast();
+  const { events, registeredEvents, registerEventMutation, isLoadingEvents } = useEvents();
 
-  const { data: registrations = [] } = useQuery<Registration[]>({
-    queryKey: ["/api/events/registrations"],
-    enabled: !!user,
-  });
-
-  const registerMutation = useMutation({
-    mutationFn: async (eventId: number) => {
-      const res = await apiRequest("POST", `/api/events/${eventId}/register`, {});
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/events/registrations"] });
-      toast({
-        title: "Success",
-        description: "Successfully registered for the event",
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const events = [
-    {
-      id: 1,
-      title: "Community Clean-up Drive",
-      date: "March 20, 2024",
-      time: "9:00 AM - 1:00 PM",
-      location: "Central Park",
-      attendees: 45,
-      description: "Join us for a community-wide initiative to clean and beautify our local parks.",
-      category: "Environment",
-      organizer: {
-        name: "Sarah Wilson",
-        avatar: "/avatars/sarah.jpg"
-      },
-      image: "/src/components/images/Communitycleanup.jpg"
-    },
-    {
-      id: 2,
-      title: "Food Bank Distribution",
-      date: "March 25, 2024",
-      time: "10:00 AM - 4:00 PM",
-      location: "Community Center",
-      attendees: 30,
-      description: "Help distribute food packages to families in need.",
-      category: "Food",
-      organizer: {
-        name: "John Doe",
-        avatar: "/avatars/john.jpg"
-      },
-      image: "/src/components/images/foodbankimage.jpg"
-    },
-    {
-      id: 3,
-      title: "Senior Center Visit",
-      date: "March 28, 2024",
-      time: "2:00 PM - 5:00 PM",
-      location: "Golden Age Center",
-      attendees: 20,
-      description: "Spend time with seniors through various activities and conversations.",
-      category: "Community",
-      organizer: {
-        name: "Emily Brown",
-        avatar: "/avatars/emily.jpg"
-      },
-      image: "/src/components/images/senior.jpg"
-    },
-  ];
-
-  const isRegistered = (eventId: number) => {
-    return registrations.some((reg) => reg.eventId === eventId);
+  const isRegistered = (eventId: string) => {
+    return registeredEvents?.some((reg: Event) => reg._id === eventId);
   };
+
+  if (isLoadingEvents) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
@@ -125,14 +58,18 @@ export default function EventsPage() {
 
       <main className="container mx-auto px-4 py-16 relative z-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {events.map((event) => (
+          {events?.map((event, index) => (
             <Card 
-              key={event.id} 
+              key={event._id} 
               className="group overflow-hidden rounded-2xl hover:shadow-xl transition-all duration-300 border-0"
             >
               <div className="relative h-64 overflow-hidden">
                 <img 
-                  src={event.image} 
+                  src={event.image || (index % 3 === 0 
+                    ? "/src/components/images/Communitycleanup.jpg"
+                    : index % 3 === 1
+                    ? "/src/components/images/food.webp"
+                    : "/src/components/images/blood donation.webp")} 
                   alt={event.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -161,29 +98,29 @@ export default function EventsPage() {
                   </div>
                   <div className="flex items-center gap-3 text-gray-600">
                     <Users className="h-4 w-4" />
-                    <span>{event.attendees} volunteers needed</span>
+                    <span>{event.registeredUsers?.length || 0} volunteers registered</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={event.organizer.avatar} />
-                      <AvatarFallback>{event.organizer.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={event.organizerAvatar || "/avatars/default.jpg"} />
+                      <AvatarFallback>{event.organizerName?.[0] || "O"}</AvatarFallback>
                     </Avatar>
-                    <span className="text-sm text-gray-600">{event.organizer.name}</span>
+                    <span className="text-sm text-gray-600">{event.organizerName || "Event Organizer"}</span>
                   </div>
                   
                   <Button 
                     className={`${
-                      isRegistered(event.id) 
+                      isRegistered(event._id) 
                         ? 'bg-green-500 hover:bg-green-600' 
                         : 'bg-purple-500 hover:bg-purple-600'
                     } text-white shadow-sm hover:shadow-md transition-all duration-300`}
-                    onClick={() => registerMutation.mutate(event.id)}
-                    disabled={isRegistered(event.id) || registerMutation.isPending}
+                    onClick={() => registerEventMutation.mutate(event._id)}
+                    disabled={isRegistered(event._id) || registerEventMutation.isPending}
                   >
-                    {isRegistered(event.id) ? "Registered" : "Join"}
+                    {isRegistered(event._id) ? "Registered" : "Join"}
                   </Button>
                 </div>
               </CardContent>
