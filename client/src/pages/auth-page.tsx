@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { insertUserSchema } from "@shared/schema";
+import { insertUserSchema } from "@/lib/schema";
 import { Redirect } from "wouter";
 import { Loader2 } from "lucide-react";
 import { Header } from "@/components/header";
@@ -139,6 +139,24 @@ export default function AuthPage() {
                                     type="email"
                                     className="h-12 bg-gray-50 border-gray-200 rounded-lg focus:ring-purple-500 focus:border-purple-500" 
                                     placeholder="your@email.com"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={registerForm.control}
+                            name="username"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700">Username</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    {...field} 
+                                    className="h-12 bg-gray-50 border-gray-200 rounded-lg focus:ring-purple-500 focus:border-purple-500" 
+                                    placeholder="Choose a username"
                                   />
                                 </FormControl>
                                 <FormMessage />
